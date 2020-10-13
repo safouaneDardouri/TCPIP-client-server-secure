@@ -12,19 +12,21 @@ namespace Examples.System.Net
 {
     public class SslTcpServer
     {
-        public X509Certificate serverCertificate = null;
+        private readonly X509Certificate serverCertificate = null;
+        private readonly string clientCertificatePassword = "localhost"; // certificate Path
 
         public SslTcpServer()
         {
+            //path to server Certificate
             string certificate = "C:\\Program Files\\OpenSSL-Win64\\bin\\serverCert.cer";
-            RunServer(certificate, ref serverCertificate);
+            serverCertificate = new X509Certificate(certificate, clientCertificatePassword);
+            RunServer(certificate, serverCertificate);
         }
 
         // The certificate parameter specifies the name of the file  
         // containing the machine certificate. 
-        public void RunServer(string certificate, ref X509Certificate serverCertificate)
+        public void RunServer(string certificate, X509Certificate serverCertificate)
         {
-            serverCertificate = new X509Certificate(certificate, "localhost");
             // Create a TCP/IP (IPv4) socket and listen for incoming connections.
             TcpListener listener = new TcpListener(IPAddress.Any, 443);
             listener.Start();

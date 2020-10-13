@@ -28,7 +28,7 @@ namespace clientApp
             // Do not allow this client to communicate with unauthenticated servers. 
             return false;
         }
-        public static void RunClient(string machineName, string serverName)
+        public static void RunClient(string machineName, string serverName, string clientCertificatePath, string clientCertificatePassword)
         {
             // Create a TCP/IP client socket. 
             // machineName is the host running the server application.
@@ -46,10 +46,11 @@ namespace clientApp
             {
                 var collection = new X509CertificateCollection
                     {
-                        new X509Certificate("C:\\Program Files\\OpenSSL-Win64\\bin\\serverCert.cer","localhost")
+                    //path to client certificate
+                        new X509Certificate(clientCertificatePath,clientCertificatePassword)
                     };
-                sslStream.AuthenticateAsClient("localhost", collection, SslProtocols.Tls12,true);
-
+                //remove specified TLS12 if we want to use default OS protocol.
+                sslStream.AuthenticateAsClient(machineName, collection, SslProtocols.Tls12,true);
             }
             catch (AuthenticationException e)
             {
@@ -104,23 +105,12 @@ namespace clientApp
         }
         public SslTcpClient()
         {
-            string serverCertificateName = null;
-            string machineName = null;
-            /*
-            // User can specify the machine name and server name. 
-            // Server name must match the name on the server's certificate. 
-            machineName = args[0];
-            if (args.Length < 2)
-            {
-                serverCertificateName = machineName;
-            }
-            else
-            {
-                serverCertificateName = args[1];
-            }*/
-            machineName = "localhost";
-            serverCertificateName = "localhost";
-            SslTcpClient.RunClient(machineName, serverCertificateName);
+            var machineName = "127.0.0.1"; //servers IP or websiteName
+            var serverCertificateName = "localhost"; // certificate Name
+            var clientCertificatePath = "C:\\Program Files\\OpenSSL - Win64\\bin\\serverCert.cer"; // certificate Path
+            var clientCertificatePassword = "localhost"; // certificate Path
+
+            SslTcpClient.RunClient(machineName, serverCertificateName, clientCertificatePath, clientCertificatePassword);
             Console.ReadKey();
         }
     }
