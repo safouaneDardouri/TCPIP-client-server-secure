@@ -1,4 +1,4 @@
-# TCPIP-client-server-Certificate-secure
+# TCPIP-Client-Server-Certificate-Secure
 
 This application is a prototype for a TCP/IP client server communication.
 We use self signed certificates x509 to authenticate Server as well as Client Side before initiating communication.
