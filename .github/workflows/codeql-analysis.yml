@@ -43,12 +43,15 @@ jobs:
       
     - name: Analyse code
       run: |
-        dotnet build
+        dotnet build ./ServerApp/ServerApp.csproj
         dotnet tool install --tool-path=./generator dotnet-reportgenerator-globaltool ./generator/reportgenerator "-targetdir:." "-reports:TestResults/**/*cobertura.xml" -reporttypes:HtmlSummary "-assemblyfilters:+*.Core;+*.Infrastructure;-*.Montage*;+*.Shared.Tests"
         # deploy
 
     - name: Generate coverage report
       run: |
+       echo "Lancement des tests d'intégration + unitaires avec récupération du code coverage"
+       rm -rf TestResults
+       dotnet test ./ServerApp/ServerApp.csproj  --collect:"XPlat Code Coverage" --results-directory:"TestResults" --logger:html Atms.sln
         cd ./TestResults
         dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
     - name: Publish coverage report to coveralls.io
