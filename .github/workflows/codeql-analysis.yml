@@ -44,7 +44,7 @@ jobs:
     - name: Analyse code
       run: |
         dotnet build ./ServerApp/ServerApp.csproj
-        rm -rf TestResults
+        mkdir TestResults
         dotnet tool install --tool-path=./generator dotnet-reportgenerator-globaltool --tool-path ./generator/reportgenerator
         dotnet test ./ServerApp/ServerApp.csproj  --collect:"XPlat Code Coverage" --results-directory:"TestResults" --logger:html
         cd TestResults
