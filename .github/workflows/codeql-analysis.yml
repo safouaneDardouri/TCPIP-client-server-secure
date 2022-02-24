@@ -43,7 +43,7 @@ jobs:
       
     - name: Analyse code
       run: |
-        dotnet tool install --tool-path=./generator dotnet-reportgenerator-globaltool ./generator/reportgenerator
+        dotnet tool install --tool-path=./generator dotnet-reportgenerator-globaltool --tool-path ./generator/reportgenerator
         # deploy
 
     - name: Generate coverage report
