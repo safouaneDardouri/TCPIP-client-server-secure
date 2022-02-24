@@ -40,10 +40,19 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      
+    - name: Analyse code
+      run: |
+        dotnet build
+        dotnet tool install --tool-path=./generator dotnet-reportgenerator-globaltool ./generator/reportgenerator "-targetdir:." "-reports:TestResults/**/*cobertura.xml" -reporttypes:HtmlSummary "-assemblyfilters:+*.Core;+*.Infrastructure;-*.Montage*;+*.Shared.Tests"
+        # deploy
 
-
-    - name: Set selected color
-      run: echo '::set-output name=SELECTED_COLOR::green'
-      id: random-color-generator
-    - name: Get color
-      run: echo "The selected color is ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
+    - name: Generate coverage report
+      run: |
+        cd ./TestResults
+        dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
+    - name: Publish coverage report to coveralls.io
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ./MyLibrary.Tests/TestResults/coverage.info 
