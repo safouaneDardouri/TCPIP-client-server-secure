@@ -44,8 +44,7 @@ jobs:
     - name: Analyse code
       run: |
         dotnet tool install --tool-path=./generator dotnet-reportgenerator-globaltool --tool-path ./generator/reportgenerator
-        cd ./generator
-        echo $(ls)
+        dotnet test ./ServerApp/ServerApp.csproj  --collect:"XPlat Code Coverage" --results-directory:"TestResults" --logger:html
         # deploy
 
     
