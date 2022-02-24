@@ -67,5 +67,5 @@ jobs:
     #   make bootstrap
     #   make release
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+    - name: Set selected color
+      run: echo '::set-output name=SELECTED_COLOR::green'
