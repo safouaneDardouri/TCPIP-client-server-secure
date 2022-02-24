@@ -43,9 +43,7 @@ jobs:
       
     - name: Analyse code
       run: |
-        dotnet build ./ServerApp/ServerApp.csproj
-        dotnet tool install --tool-path=./generator 
-        dotnet-reportgenerator-globaltool ./generator/reportgenerator "-targetdir:." "-reports:TestResults/**/*cobertura.xml" -reporttypes:HtmlSummary
+        dotnet tool install --tool-path=./generator dotnet-reportgenerator-globaltool ./generator/reportgenerator
         # deploy
 
     - name: Generate coverage report
