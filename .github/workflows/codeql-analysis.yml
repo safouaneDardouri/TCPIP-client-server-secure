@@ -44,17 +44,8 @@ jobs:
     - name: Analyse code
       run: |
         dotnet tool install --tool-path=./generator dotnet-reportgenerator-globaltool --tool-path ./generator/reportgenerator
+        cd ./generator
+        echo $(ls)
         # deploy
 
-    - name: Generate coverage report
-      run: |
-       echo "Lancement des tests d'intégration + unitaires avec récupération du code coverage"
-       rm -rf TestResults
-       dotnet test ./ServerApp/ServerApp.csproj  --collect:"XPlat Code Coverage" --results-directory:"TestResults" --logger:html Atms.sln
-        cd ./TestResults
-        dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
-    - name: Publish coverage report to coveralls.io
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./MyLibrary.Tests/TestResults/coverage.info 
+    
